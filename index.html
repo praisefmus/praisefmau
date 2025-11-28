@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Praise FM - En Direct</title>
     <meta name="theme-color" content="#ff4d00">
-    <link rel="icon" type="image/png" sizes="32x32" href="/image/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/praisefmfr/praisefmfr/main/image/favicon-32x32.png">
     <style>
         :root { --orange:#ff4d00; --dark:#111; --grey:#555; --light-grey:#888; --bg:#fff; --border-color:#ddd; }
         * { margin:0; padding:0; box-sizing:border-box; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif; }
@@ -61,20 +61,20 @@
         .mini-track-bar { width:100%; height:4px; background:#ddd; border-radius:2px; position:relative; cursor:pointer; }
         .mini-track-fill { height:100%; background:var(--orange); border-radius:2px; width:0%; }
         .mini-track-time { display:flex; justify-content:space-between; font-size:11px; color:var(--light-grey); margin-top:4px; }
-        @media (max-width:480px) { 
-            .mini-player { padding:10px; } 
-            .mini-player-content { flex-direction:column; align-items:flex-start; gap:14px; } 
-            .mini-play { width:64px; height:64px; }  
-            .circle-container { width:260px; height:260px; } 
-            .program-title { font-size:24px; } 
-            .mini-controls { gap:10px; } 
-            .mini-volume { width:80px; } 
+        @media (max-width:480px) {
+            .mini-player { padding:10px; }
+            .mini-player-content { flex-direction:column; align-items:flex-start; gap:14px; }
+            .mini-play { width:64px; height:64px; }
+            .circle-container { width:260px; height:260px; }
+            .program-title { font-size:24px; }
+            .mini-controls { gap:10px; }
+            .mini-volume { width:80px; }
         }
     </style>
 </head>
 <body>
 
-<!-- 🔽 Locale Banner (FR → DE, CH, NL) -->
+<!-- Locale Banner -->
 <style>
   #praisefm-locale-bar {
     position: fixed; top: 0; left: 0; right: 0;
@@ -84,40 +84,27 @@
     padding: 12px 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     backdrop-filter: blur(6px);
   }
-  #praisefm-locale-bar .pfm-message {
-    flex: 1; font-size: 15px; line-height: 1.2; margin-right: 12px;
-  }
-  #praisefm-locale-bar .pfm-actions {
-    display: flex; gap: 8px; align-items: center;
-  }
+  #praisefm-locale-bar .pfm-message { flex: 1; font-size: 15px; line-height: 1.2; margin-right: 12px; }
+  #praisefm-locale-bar .pfm-actions { display: flex; gap: 8px; align-items: center; }
   #praisefm-locale-bar button.pfm-cta {
     background: #0071e3; border: none; color: white;
     padding: 8px 12px; border-radius: 18px; font-weight: 600;
     cursor: pointer; font-size: 14px;
   }
-  #praisefm-locale-bar button.pfm-close {
-    background: transparent; border: none; color: #cfcfcf;
-    font-size: 18px; cursor: pointer; padding: 6px;
-  }
+  #praisefm-locale-bar button.pfm-close { background: transparent; border: none; color: #cfcfcf; font-size: 18px; cursor: pointer; padding: 6px; }
   .pfm-bar-shim { height: 56px; display: none; }
-  @media (max-width: 520px) {
-    #praisefm-locale-bar { padding: 10px 12px; }
-    #praisefm-locale-bar .pfm-message { font-size: 13px; }
-    .pfm-bar-shim { height: 64px; }
-  }
+  @media (max-width: 520px) { #praisefm-locale-bar { padding: 10px 12px; } #praisefm-locale-bar .pfm-message { font-size: 13px; } .pfm-bar-shim { height: 64px; } }
 </style>
 
-<div id="praisefm-locale-bar" role="region" aria-label="Locale switch banner" style="display:none;">
+<div id="praisefm-locale-bar" style="display:none;">
   <div class="pfm-message">
     <strong>Bonjour ! Vous êtes en France.</strong>
-    <div style="opacity:0.9; margin-top:4px; font-size:13px;">
-      Voulez-vous passer à une autre version régionale ?
-    </div>
+    <div style="opacity:0.9; margin-top:4px; font-size:13px;">Voulez-vous passer à une autre version régionale ?</div>
   </div>
   <div class="pfm-actions">
-    <button class="pfm-cta" id="pfm-go-de" title="Aller à Praise FM Allemagne">🇩🇪 Allemagne</button>
-    <button class="pfm-cta" id="pfm-go-ch" title="Aller à Praise FM Suisse">🇨🇭 Suisse</button>
-    <button class="pfm-close" id="pfm-close" aria-label="Fermer">&times;</button>
+    <button class="pfm-cta" id="pfm-go-de">🇩🇪 Allemagne</button>
+    <button class="pfm-cta" id="pfm-go-ch">🇨🇭 Suisse</button>
+    <button class="pfm-close" id="pfm-close" aria-label="Fermer">×</button>
   </div>
 </div>
 <div class="pfm-bar-shim" id="pfm-bar-shim"></div>
@@ -128,7 +115,6 @@
   const CH_URL = "https://praisefmch.vercel.app";
   const STORAGE_KEY = "praisefm_locale_banner_closed_v1";
   const EXPIRE_DAYS = 30;
-
   function isClosed() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -137,39 +123,19 @@
       return obj?.ts && (Date.now() - obj.ts) < (EXPIRE_DAYS * 24 * 60 * 60 * 1000);
     } catch (e) { return false; }
   }
-
   if (isClosed()) return;
   if (!location.hostname.includes("praisefmfr")) return;
-
   const bar = document.getElementById("praisefm-locale-bar");
   const shim = document.getElementById("pfm-bar-shim");
   if (!bar) return;
   bar.style.display = "flex";
   shim.style.display = "block";
 
-  document.getElementById("pfm-go-de").addEventListener("click", () => {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ts: Date.now()})); } catch(e){}
-    window.location.href = DE_URL;
-  });
-  document.getElementById("pfm-go-ch").addEventListener("click", () => {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ts: Date.now()})); } catch(e){}
-    window.location.href = CH_URL;
-  });
-  document.getElementById("pfm-close").addEventListener("click", () => {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ts: Date.now()})); } catch(e){}
-    bar.style.display = "none";
-    shim.style.display = "none";
-  });
-  document.addEventListener("keydown", e => {
-    if (e.key === "Escape") {
-      try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ts: Date.now()})); } catch(e){}
-      bar.style.display = "none";
-      shim.style.display = "none";
-    }
-  });
+  document.getElementById("pfm-go-de").addEventListener("click", () => { localStorage.setItem(STORAGE_KEY, JSON.stringify({ts: Date.now()})); location.href = DE_URL; });
+  document.getElementById("pfm-go-ch").addEventListener("click", () => { localStorage.setItem(STORAGE_KEY, JSON.stringify({ts: Date.now()})); location.href = CH_URL; });
+  document.getElementById("pfm-close").addEventListener("click", () => { localStorage.setItem(STORAGE_KEY, JSON.stringify({ts: Date.now()})); bar.style.display = shim.style.display = "none"; });
 })();
 </script>
-<!-- 🔼 FIM BANNER -->
 
 <div class="container">
     <h1 class="station-title">Praise FM</h1>
@@ -177,7 +143,7 @@
     <div class="circle-container">
         <div class="circle-border" id="progressRing"></div>
         <div class="circle-img">
-            <img id="mainImg" src="/image/logopraisefm.webp" alt="En cours de lecture">
+            <img id="mainImg" src="https://raw.githubusercontent.com/praisefmfr/praisefmfr/main/image/logopraisefm.webp" alt="En cours">
         </div>
     </div>
     <div class="live-badge"><div class="live-dot"></div> EN DIRECT</div>
@@ -185,10 +151,11 @@
     <button class="play-button" id="bigPlay">
         <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg> Lecture
     </button>
+
     <div class="upnext">
         <div class="upnext-items">
             <div class="upnext-item">
-                <img id="upnextImg1" src="/image/logopraisefmnonstop.png" class="upnext-img" onerror="this.src='/image/logopraisefmnonstop.png'">
+                <img id="upnextImg1" src="https://raw.githubusercontent.com/praisefmfr/praisefmfr/main/image/praisefmnonstop.png" class="upnext-img" onerror="this.src='https://raw.githubusercontent.com/praisefmfr/praisefmfr/main/image/logopraisefm.webp'">
                 <div>
                     <div class="upnext-time" id="upnextTime1">-</div>
                     <div class="upnext-title" id="upnextTitle1">-</div>
@@ -196,7 +163,7 @@
                 </div>
             </div>
             <div class="upnext-item">
-                <img id="upnextImg2" src="/image/praisefmcarpoollogo.webp" class="upnext-img" onerror="this.src='/image/logopraisefm.webp'">
+                <img id="upnextImg2" src="https://raw.githubusercontent.com/praisefmfr/praisefmfr/main/image/praisefmcarpoollogo.webp" class="upnext-img" onerror="this.src='https://raw.githubusercontent.com/praisefmfr/praisefmfr/main/image/logopraisefm.webp'">
                 <div>
                     <div class="upnext-time" id="upnextTime2">-</div>
                     <div class="upnext-title" id="upnextTitle2">-</div>
@@ -205,14 +172,16 @@
             </div>
         </div>
     </div>
+
     <div class="recently">
         <div class="recently-header">Dernières diffusions</div>
         <div id="recentList"></div>
     </div>
 </div>
+
 <div class="mini-player" id="miniPlayer">
     <div class="mini-player-content">
-        <img id="miniImg" src="/image/logopraisefm.webp" class="mini-cover">
+        <img id="miniImg" src="https://raw.githubusercontent.com/praisefmfr/praisefmfr/main/image/logopraisefm.webp" class="mini-cover">
         <div class="mini-info">
             <div class="mini-title" id="miniTitle">Praise FM</div>
             <div class="mini-artist" id="miniArtist">Louange & Adoration</div>
@@ -227,42 +196,36 @@
             </div>
         </div>
         <div class="mini-controls">
-            <button class="mini-btn" id="miniRewind">
-                <svg viewBox="0 0 24 24"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/></svg>
-            </button>
-            <button class="mini-play" id="miniPlayPause">
-                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </button>
-            <button class="mini-btn" id="miniForward">
-                <svg viewBox="0 0 24 24"><path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/></svg>
-            </button>
+            <button class="mini-btn" id="miniRewind"><svg viewBox="0 0 24 24"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/></svg></button>
+            <button class="mini-play" id="miniPlayPause"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+            <button class="mini-btn" id="miniForward"><svg viewBox="0 0 24 24"><path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/></svg></button>
             <div class="mini-volume">
-                <button class="mini-btn" id="miniVolumeIcon">
-                    <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
-                </button>
-                <div class="mini-volume-bar" id="miniVolumeBar">
-                    <div class="mini-volume-fill" id="miniVolumeFill"></div>
-                </div>
+                <button class="mini-btn" id="miniVolumeIcon"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></button>
+                <div class="mini-volume-bar" id="miniVolumeBar"><div class="mini-volume-fill" id="miniVolumeFill"></div></div>
             </div>
         </div>
     </div>
 </div>
+
 <script>
     const STREAM_URL = "https://stream.zeno.fm/hvwifp8ezc6tv";
     const audio = new Audio(STREAM_URL);
     audio.volume = 0.8;
+
+    const BASE_IMG = "https://raw.githubusercontent.com/praisefmfr/praisefmfr/main/image";
     const images = {
-        default: "/image/logopraisefm.webp",
-        midnight: "/image/midnightgracelogo.webp",
-        worship: "/image/praisefmworship.png",
-        morning: "/image/morningshowlogo.webp",
-        midday: "/image/middaygracelogo.webp",
-        nonstop: "/image/praisefmnonstop.png",
-        carpool: "/image/praisefmcarpoollogo.webp",
-        pop: "/image/praisefmpoplogo.webp",
-        sunday: "/image/sundaywithchrist.png",
-        magazine: "/image/praisefmmagazine.png"
+        default: `${BASE_IMG}/logopraisefm.webp`,
+        midnight: `${BASE_IMG}/midnightgracelogo.webp`,
+        worship: `${BASE_IMG}/praisefmworship.png`,
+        morning: `${BASE_IMG}/morningshowlogo.webp`,
+        midday: `${BASE_IMG}/middaygracelogo.webp`,
+        nonstop: `${BASE_IMG}/praisefmnonstop.png`,
+        carpool: `${BASE_IMG}/praisefmcarpoollogo.webp`,
+        pop: `${BASE_IMG}/praisefmpoplogo.webp`,
+        sunday: `${BASE_IMG}/sundaywithchrist.png`,
+        magazine: `${BASE_IMG}/praisefmmagazine.png`
     };
+
     const hosts = {
         "Morning Show": "Stancy Campbell",
         "Midday Grace": "Michael Ray",
@@ -274,6 +237,7 @@
         "Praise FM Worship": "Praise FM",
         "Praise FM": "Praise FM"
     };
+
     const programNames = {
         "Midnight Grace": "Grâce de Minuit",
         "Morning Show": "Émission du Matin",
@@ -285,6 +249,7 @@
         "Sunday With Christ": "Dimanche avec Christ",
         "Praise FM Magazine": "Praise FM Magazine"
     };
+
     const schedule = [
         {start:"00:00", end:"06:00", name:"Midnight Grace", img:images.midnight, desc: "Daniel Brooks diffuse les louanges les plus apaisantes de la nuit."},
         {start:"06:00", end:"07:00", name:"Praise FM Worship", img:images.worship, desc: "Praise FM joue les plus belles musiques d’adoration."},
@@ -299,8 +264,15 @@
         {start:"20:30", end:"21:30", name:"Praise FM Non Stop", img:images.nonstop, days:[1,2,3,4,5,6], desc: "Praise FM avec des louanges non-stop."},
         {start:"21:30", end:"00:00", name:"Praise FM Worship", img:images.worship, desc: "Praise FM joue les plus belles musiques d’adoration."}
     ];
-    function getTime() { return new Date(new Date().toLocaleString("fr-FR", {timeZone:"Europe/Paris"})); }
+
+    // ← FUNÇÃO CORRIGIDA (agora funciona no mundo inteiro)
+    function getTime() {
+        const parisStr = new Date().toLocaleString("sv", { timeZone: "Europe/Paris" });
+        return new Date(parisStr);
+    }
+
     function timeToMins(t) { const [h,m]=t.split(":").map(Number); return h*60+m; }
+
     function getCurrentAndNext() {
         const now = getTime();
         const day = now.getDay();
@@ -330,15 +302,16 @@
             next2: future[1]?.prog || schedule[1]
         };
     }
+
     function formatProgramName(p) {
         if (!p) return "Praise FM";
         const base = p.name;
         const translated = programNames[base] || base;
         const host = hosts[base] || "Praise FM";
-        if (base === "Praise FM") return translated;
-        if (["Praise FM Non Stop", "Praise FM POP", "Praise FM Magazine", "Praise FM Worship"].includes(base)) return translated;
+        if (["Praise FM", "Praise FM Non Stop", "Praise FM POP", "Praise FM Magazine", "Praise FM Worship"].includes(base)) return translated;
         return `${translated} avec ${host}`;
     }
+
     function formatRange(p) {
         const [sh, sm] = p.start.split(":").map(Number);
         const [eh, em] = p.end.split(":").map(Number);
@@ -346,14 +319,17 @@
         const eHour = eh === 0 ? 24 : eh;
         return `${sHour}h${sm.toString().padStart(2,'0')} – ${eHour}h${em.toString().padStart(2,'0')}`;
     }
+
     let currentTrack = {title:"", artist:"", duration:0, startTime:0};
     const recents = [];
     let trackTimer = null;
+
     function formatTime(seconds) {
         const min = Math.floor(seconds / 60);
         const sec = Math.floor(seconds % 60);
         return `${min}:${sec.toString().padStart(2, '0')}`;
     }
+
     function updateProgramProgress() {
         const {current} = getCurrentAndNext();
         const now = getTime();
@@ -373,6 +349,7 @@
             document.getElementById("miniTrackDuration").textContent = "Live";
         }
     }
+
     async function fetchAlbumCover(artist, title) {
         if (!artist || !title) return images.default;
         const query = encodeURIComponent(`${artist} ${title}`);
@@ -380,12 +357,13 @@
         try {
             const res = await fetch(url);
             const data = await res.json();
-            if (data.results && data.results[0] && data.results[0].artworkUrl100) {
+            if (data.results?.[0]?.artworkUrl100) {
                 return data.results[0].artworkUrl100.replace('100x100', '600x600');
             }
         } catch (e) {}
         return images.default;
     }
+
     async function processMetadata(artist, title) {
         if (trackTimer) clearInterval(trackTimer);
         if (title.toLowerCase().includes("commercial") || title.toLowerCase().includes("ad")) {
@@ -411,6 +389,7 @@
         updateDisplay();
         trackTimer = setInterval(updateProgramProgress, 1000);
     }
+
     try {
         const es = new EventSource("https://api.zeno.fm/mounts/metadata/subscribe/hvwifp8ezc6tv");
         es.onmessage = e => {
@@ -423,15 +402,19 @@
             } catch {}
         };
     } catch(e) {}
+
     function togglePlay() {
-        if (audio.paused) { audio.play(); document.getElementById("miniPlayer").classList.add("show"); }
-        else audio.pause();
+        if (audio.paused) { 
+            audio.play(); 
+            document.getElementById("miniPlayer").classList.add("show"); 
+        } else audio.pause();
         const playing = !audio.paused;
         const playSvg = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
         const pauseSvg = '<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
-        document.querySelector("#bigPlay").innerHTML = playing ? pauseSvg + ' Pause' : playSvg + ' Play';
+        document.querySelector("#bigPlay").innerHTML = playing ? pauseSvg + ' Pause' : playSvg + ' Lecture';
         document.getElementById("miniPlayPause").innerHTML = playing ? pauseSvg : playSvg;
     }
+
     document.getElementById("bigPlay").onclick = togglePlay;
     document.getElementById("miniPlayPause").onclick = togglePlay;
     document.getElementById("miniRewind").onclick = () => audio.currentTime = Math.max(0, audio.currentTime - 15);
@@ -446,26 +429,31 @@
     document.getElementById("miniVolumeIcon").onclick = () => {
         audio.muted = !audio.muted;
         document.getElementById("miniVolumeIcon").innerHTML = audio.muted 
-            ? '<svg viewBox="0 0 24 24"><path d="M16.5 12l4.5 4.5-1.5 1.5L15 13.5 11.5 17H7v-6h4.5L15 7.5l4.5-4.5 1.5 1.5L16.5 12z"/></svg>' 
+            ? '<svg viewBox="0 0 24 24"><path d="M16.5 12l4.5 4.5-1.5 1.5L15 13.5 11.5 17H7v-6h4.5L15 7.5l4.5-4.5 1.5 1.5L16.5 12z"/></svg>'
             : '<svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>';
     };
+
     function updateDisplay() {
         const {current, next1, next2} = getCurrentAndNext();
         const now = getTime();
+
         document.getElementById("mainImg").src = current.img || images.default;
         document.getElementById("miniImg").src = current.img || images.default;
         document.getElementById("upnextImg1").src = next1.img || images.default;
         document.getElementById("upnextImg2").src = next2.img || images.default;
+
         const displayName = formatProgramName(current);
         document.getElementById("programTitle").textContent = displayName;
         document.getElementById("miniTitle").textContent = currentTrack.title ? currentTrack.title : displayName;
         document.getElementById("miniArtist").textContent = currentTrack.artist ? currentTrack.artist : "Louange & Adoration";
+
         document.getElementById("upnextTime1").textContent = "UP NEXT: " + formatRange(next1);
         document.getElementById("upnextTitle1").textContent = formatProgramName(next1);
         document.getElementById("upnextDesc1").textContent = next1.desc || "-";
         document.getElementById("upnextTime2").textContent = formatRange(next2);
         document.getElementById("upnextTitle2").textContent = formatProgramName(next2);
         document.getElementById("upnextDesc2").textContent = next2.desc || "-";
+
         if (current.start && current.end) {
             const s = timeToMins(current.start);
             const e = timeToMins(current.end);
@@ -479,6 +467,7 @@
         }
         updateProgramProgress();
     }
+
     setInterval(updateDisplay, 8000);
     updateDisplay();
 </script>
